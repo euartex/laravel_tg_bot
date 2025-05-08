@@ -1,0 +1,175 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Telegram Webhook API",
+        "description": "API for handling Telegram webhook updates and configuration in a Laravel application.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/telegram/webhook": {
+            "post": {
+                "tags": [
+                    "Telegram Webhook"
+                ],
+                "summary": "Handle Telegram webhook updates",
+                "description": "Processes incoming Telegram messages, such as /start, /stop, and other commands, and manages user subscriptions.",
+                "operationId": "handleTelegramWebhook",
+                "requestBody": {
+                    "description": "Telegram webhook update data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "message"
+                                ],
+                                "properties": {
+                                    "message": {
+                                        "properties": {
+                                            "chat": {
+                                                "required": [
+                                                    "id"
+                                                ],
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "Unique identifier for the chat",
+                                                        "type": "string",
+                                                        "example": "123456789"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "text": {
+                                                "description": "The text of the message (e.g., a command)",
+                                                "type": "string",
+                                                "example": "/start"
+                                            },
+                                            "from": {
+                                                "required": [
+                                                    "first_name"
+                                                ],
+                                                "properties": {
+                                                    "first_name": {
+                                                        "description": "First name of the sender",
+                                                        "type": "string",
+                                                        "example": "TestUser"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful processing of the webhook",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "OK"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid webhook data"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/telegram/set-webhook": {
+            "get": {
+                "tags": [
+                    "Telegram Webhook"
+                ],
+                "summary": "Set Telegram webhook URL",
+                "description": "Configures the Telegram bot to send webhook updates to the specified URL.",
+                "operationId": "setTelegramWebhook",
+                "responses": {
+                    "200": {
+                        "description": "Webhook set successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Webhook set successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to set webhook",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Webhook setup failed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Telegram Webhook",
+            "description": "Telegram Webhook"
+        }
+    ]
+}
